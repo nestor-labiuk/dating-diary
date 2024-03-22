@@ -9,6 +9,7 @@ export class Server {
         this.app = express()
         this.middleware()
         this.routes()
+        this.connectionDb()
     }
 
     async connectionDb() {
