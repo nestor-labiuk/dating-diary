@@ -13,7 +13,11 @@ const UserSchema = new Schema(
         password: {
             type: String,
             require: true
-        }
+        },
+        level: {
+            type: String,
+            default: 'Iron'
+        },
     })
 
 export default model('User', UserSchema)
