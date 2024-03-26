@@ -1,0 +1,24 @@
+### All users - OK -
+GET http://localhost:8080/api/users
+
+### Get user by id - OK -
+GET http://localhost:8080/api/users/66021e449d0bfef3c80bc04d
+
+### Create user - OK -
+POST http://localhost:8080/api/users
+Content-Type:  application/json
+
+{
+    
+}
+
+### Update user - OK -
+PATCH http://localhost:8080/api/users/65fdfd6d64fdea75b107e9e
+Content-Type: application/json
+
+{
+    "level": "Iron"
+}
+
+### Delete user - OK -
+DELETE http://localhost:8080/api/users/65fdfeda9cffcab6a6057a43
