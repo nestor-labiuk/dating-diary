@@ -1,4 +1,4 @@
-import { logger } from '../loggers/index.loggers.js'
+import { logger, removedEntitiesLogger } from '../loggers/index.loggers.js'
 import User from '../models/User.js'
 import { successResponse, errorResponse } from '../utils/response.utils.js'
 
@@ -88,6 +88,7 @@ export const deleteUser = async (req, res, next) => {
         }
         res.status(200)
         logger.info(successResponse('User deleted', user))
+        removedEntitiesLogger.info(successResponse('User deleted', user))
         res.json(successResponse('User deleted', user))
    
     } catch (err) {
