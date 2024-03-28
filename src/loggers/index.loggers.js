@@ -1,5 +1,6 @@
 import { createLogger, format, transports } from 'winston'
 import DeletedTransport from './transport/DeletedTransport.js'
+import IncidentTransport from './transport/IncidentTransport.js'
 
 export const logger = createLogger({
     level: 'info',
@@ -14,6 +15,7 @@ export const logger = createLogger({
         new transports.File({ filename: 'errors.log', level: 'error' }),
         new transports.File({ filename: 'warns.log', level: 'warn' }),
         new transports.File({ filename: 'general.log' }),
+        new IncidentTransport({ level: 'error' }),
         new transports.Console({
             format:
             format.combine(
