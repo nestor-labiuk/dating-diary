@@ -3,6 +3,7 @@ import cors from 'cors'
 import morgan from 'morgan'
 import { dbConnection } from './db/config.js'
 import { loginRoutes, usersRoutes } from './routes/index.routes.js'
+import { logger } from './loggers/index.loggers.js'
 
 export class Server {
     constructor() {
@@ -29,7 +30,7 @@ export class Server {
 
     listen() {
         this.app.listen(process.env.PORT, () => {
-            console.log(`Server listening  http://localhost:${process.env.PORT}`)
+            logger.info(`Server listening  http://localhost:${process.env.PORT}`)
         })
     }
 }
