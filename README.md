@@ -10,13 +10,13 @@ servicio eficiente y cómodo para los usuarios.
 
 - Para clonar el repositorio del proyecto:
 
-  ```json
-  git clone https://https://github.com/nestor-labiuk/library-management.git
+  ```html
+  git clone https://github.com/nestor-labiuk/library-management.git
   ```
 
 - Después tenes que instalar las dependencias:
 
-  ```json
+  ```html
   npm install 
   ```
 
@@ -56,7 +56,7 @@ servicio eficiente y cómodo para los usuarios.
 
 ## Estructura de carpetas
 
-``` json
+``` html
 ├── node_modules
 ├── src
     └── controllers
