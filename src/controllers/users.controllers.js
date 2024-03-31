@@ -5,7 +5,7 @@ import { successResponse, errorResponse } from '../utils/response.utils.js'
 export const getAllUsers = async (req, res, next ) => {
     try {
         const users = await User.find()
-        if (!users) {
+        if (users.length === 0) {
             res.status(204)
             logger.warn(errorResponse('List is empty', []))
             return res.json(errorResponse('List is empty', []))

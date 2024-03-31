@@ -1,0 +1,29 @@
+### Get all books - OK -
+GET http://localhost:8080/api/books
+
+### Get books by id - OK -
+GET http://localhost:8080/api/books/id
+
+### Create a new book - OK -
+POST http://localhost:8080/api/books
+Content-Type: application/json
+
+{
+    "title": "Book 01",
+    "author": " Author 03",
+    "gender": " Gender 01",
+    "editorial":"Editoria 02",
+    "salesStock": 0,
+    "rentStock": 3
+}
+
+### Update book - OK -
+PATCH http://localhost:8080/api/books/660838f265c61145fa98418c
+Content-Type: application/json
+
+{
+    "title": "Book 05"
+}
+
+### Delete Book - OK -
+DELETE http://localhost:8080/api/books/6608378532e88de62baf4e69
