@@ -1,5 +1,6 @@
 import { logger, removedEntitiesLogger } from '../loggers/index.loggers.js'
 import User from '../models/User.js'
+import { encryptPassword } from '../utils/encryptPassword.utils.js'
 import { successResponse, errorResponse } from '../utils/response.utils.js'
 
 export const getAllUsers = async (req, res, next ) => {
@@ -42,6 +43,7 @@ export const createUser = async (req, res, next ) => {
     try {
         const { name, email, password } = req.body
         const user = new User({ name, email, password })
+        user.password = encryptPassword(password)
         await user.save()
         res.status(201)
         logger.info(successResponse('User created', user))
@@ -65,7 +67,7 @@ export const updateUser = async (req, res, next) => {
         }
         currentUser.name = name || currentUser.name
         currentUser.email = email || currentUser.email
-        currentUser.password = password || currentUser.password
+        currentUser.password = encryptPassword(password) || currentUser.password
         const user = await currentUser.save()
         res.status(200)
         logger.info(successResponse('User update', user))
