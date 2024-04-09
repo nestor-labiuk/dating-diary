@@ -2,7 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import morgan from 'morgan'
 import { dbConnection } from './db/config.js'
-import { booksRoutes, loginRoutes, usersRoutes } from './routes/index.routes.js'
+import { adminRoutes, booksRoutes, loginRoutes, usersRoutes } from './routes/index.routes.js'
 import { logger } from './loggers/index.loggers.js'
 
 export class Server {
@@ -27,6 +27,7 @@ export class Server {
         this.app.use('/api/users', usersRoutes)
         this.app.use('/api/books', booksRoutes)
         this.app.use('/api/login', loginRoutes)
+        this.app.use('/api/admin', adminRoutes)
     }
 
     listen() {
