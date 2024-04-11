@@ -8,7 +8,7 @@ class DeletedTransport extends Transport {
     log(info, callback) {
         setImmediate(async() => {
             const deleted = new Deleted({
-                message: {
+                data: {
                     date: info.timestamp,
                     data: info.data,
                     message: info.message
