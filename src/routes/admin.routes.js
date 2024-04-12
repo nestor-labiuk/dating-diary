@@ -1,16 +1,19 @@
 import { Router } from 'express'
-import { createLevel, createRole, deleteLevel, deleteRole, getAllLevels, getAllRoles, updateLevel, updateRole } from '../controllers/admin.controllers.js'
+import { adminCreateLevel, adminCreateRole, adminDeleteLevel, adminDeleteRole, adminGetAllLevels, adminGetAllRoles, adminUpdateLevel, adminUpdateRole, adminUpdateUser } from '../controllers/admin.controllers.js'
+import { isSuperAdmin, isValidateToken } from '../middlewares/validateToken.js'
 
 const router = Router()
 
-router.get('/role', getAllRoles)
-router.post('/role', createRole)
-router.patch('/role/:id', updateRole)
-router.delete('/role/:id', deleteRole)
+router.patch('/user/:id', isValidateToken, isSuperAdmin, adminUpdateUser)
 
-router.get('/level', getAllLevels)
-router.post('/level', createLevel)
-router.patch('/level/:id', updateLevel)
-router.delete('/level/:id', deleteLevel)
+router.get('/role', isValidateToken, isSuperAdmin, adminGetAllRoles)
+router.post('/role', isValidateToken, isSuperAdmin, adminCreateRole)
+router.patch('/role/:id', isValidateToken, isSuperAdmin, adminUpdateRole)
+router.delete('/role/:id', isValidateToken, isSuperAdmin, adminDeleteRole)
+
+router.get('/level', isValidateToken, isSuperAdmin, adminGetAllLevels)
+router.post('/level', isValidateToken, isSuperAdmin, adminCreateLevel)
+router.patch('/level/:id', isValidateToken, isSuperAdmin, adminUpdateLevel)
+router.delete('/level/:id', isValidateToken, isSuperAdmin, adminDeleteLevel)
 
 export default router
