@@ -1,4 +1,6 @@
 import { logger, removedEntitiesLogger } from '../loggers/index.loggers.js'
+import Level from '../models/Level.js'
+import Role from '../models/Role.js'
 import User from '../models/User.js'
 import { encryptPassword } from '../utils/encryptPassword.utils.js'
 import { successResponse, errorResponse } from '../utils/response.utils.js'
@@ -42,7 +44,9 @@ export const getUser = async (req, res, next) => {
 export const createUser = async (req, res, next ) => {
     try {
         const { name, email, password } = req.body
-        const user = new User({ name, email, password })
+        const level = await Level.findOne({ level: 'Iron' })
+        const role = await Role.findOne({ role: 'User' })
+        const user = new User({ name, email, password, level, role })
         user.password = encryptPassword(password)
         await user.save()
         res.status(201)
