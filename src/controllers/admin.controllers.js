@@ -1,9 +1,40 @@
 import { logger } from '../loggers/index.loggers.js'
 import Level from '../models/Level.js'
 import Role from '../models/Role.js'
+import User from '../models/User.js'
+import { encryptPassword } from '../utils/encryptPassword.utils.js'
 import { errorResponse, successResponse } from '../utils/response.utils.js'
 
-export const getAllRoles = async(req, res, next ) => {
+export const adminUpdateUser = async (req, res, next) => {
+    try {
+        const { id } = req.params
+        const { name, email, password, level, role } = req.body
+        const currentUser = await User.findById(id)
+        const newLevel = await Level.findOne({ level: level })
+        const newRole = await Role.findOne({ role: role })
+        if (!currentUser) {
+            res.status(404)
+            logger.warn(errorResponse('User not found', currentUser)) 
+            return res.json(errorResponse('User not found', currentUser))
+        }
+        currentUser.role.push(newRole) 
+        currentUser.level = newLevel || currentUser.level
+        if (password) {currentUser.password = encryptPassword(password)}
+
+        currentUser.name = name || currentUser.name
+        currentUser.email = email || currentUser.email
+        const user = await currentUser.save()
+        res.status(200)
+        logger.info(successResponse('User update', user))
+        res.json(successResponse('User updated', user))
+
+    } catch (err) {
+        res.json(err)
+        next(err)
+    }
+}
+
+export const adminGetAllRoles = async(req, res, next ) => {
     try {
         const userRoles = await Role.find()
         if (userRoles.length === 0) {
@@ -21,7 +52,7 @@ export const getAllRoles = async(req, res, next ) => {
     }
 }
 
-export const createRole = async(req, res, next) => {
+export const adminCreateRole = async(req, res, next) => {
     try {
         const { role, description } = req.body
         const userRole = new Role({ role, description })
@@ -36,7 +67,7 @@ export const createRole = async(req, res, next) => {
     }
 }
 
-export const updateRole = async(req, res, next) => {
+export const adminUpdateRole = async(req, res, next) => {
     try {
         const { id } = req.params
         const { role, description } = req.body
@@ -59,7 +90,7 @@ export const updateRole = async(req, res, next) => {
     }
 }
 
-export const deleteRole = async(req, res, next) => {
+export const adminDeleteRole = async(req, res, next) => {
     try {
         const { id } = req.params
         const userRole = await Role.findByIdAndDelete(id)
@@ -78,7 +109,7 @@ export const deleteRole = async(req, res, next) => {
     }
 }
 
-export const getAllLevels = async(req, res, next ) => {
+export const adminGetAllLevels = async(req, res, next ) => {
     try {
         const UserLevels = await Level.find()
         if (UserLevels.length === 0) {
@@ -96,11 +127,11 @@ export const getAllLevels = async(req, res, next ) => {
     }
 }
 
-export const createLevel = async(req, res, next) => {
+export const adminCreateLevel = async(req, res, next) => {
     try {
         const { level, description } = req.body
         const userLevel = new Level({ level, description })
-        await level.save()
+        await userLevel.save()
         res.status(201)
         logger.info(successResponse('level created', userLevel))
         res.json(successResponse('level created', userLevel))
@@ -111,7 +142,7 @@ export const createLevel = async(req, res, next) => {
     }
 }
 
-export const updateLevel = async(req, res, next) => {
+export const adminUpdateLevel = async(req, res, next) => {
     try {
         const { id } = req.params
         const { level, description } = req.body
@@ -134,7 +165,7 @@ export const updateLevel = async(req, res, next) => {
     }
 }
 
-export const deleteLevel = async(req, res, next) => {
+export const adminDeleteLevel = async(req, res, next) => {
     try {
         const { id } = req.params
         const UserLevel = await Level.findByIdAndDelete(id)
