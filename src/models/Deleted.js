@@ -1,7 +1,7 @@
 import { model, Schema } from 'mongoose'
 
 const DeletedSchema = new Schema({
-    message: { 
+    data: { 
         type: Schema.Types.Mixed, 
         require: true
     },

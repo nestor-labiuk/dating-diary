@@ -15,9 +15,13 @@ const UserSchema = new Schema(
             require: true
         },
         level: {
-            type: String,
-            default: 'Iron'
+            type: Schema.Types.ObjectId,
+            ref: 'Level'
         },
+        role: [{
+            type: Schema.Types.ObjectId,
+            ref: 'Role'
+        }]
     })
 
 export default model('User', UserSchema)

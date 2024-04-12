@@ -1,11 +1,14 @@
 import { logger, removedEntitiesLogger } from '../loggers/index.loggers.js'
+import Level from '../models/Level.js'
+import Role from '../models/Role.js'
 import User from '../models/User.js'
+import { encryptPassword } from '../utils/encryptPassword.utils.js'
 import { successResponse, errorResponse } from '../utils/response.utils.js'
 
 export const getAllUsers = async (req, res, next ) => {
     try {
         const users = await User.find()
-        if (!users) {
+        if (users.length === 0) {
             res.status(204)
             logger.warn(errorResponse('List is empty', []))
             return res.json(errorResponse('List is empty', []))
@@ -41,7 +44,10 @@ export const getUser = async (req, res, next) => {
 export const createUser = async (req, res, next ) => {
     try {
         const { name, email, password } = req.body
-        const user = new User({ name, email, password })
+        const level = await Level.findOne({ level: 'Iron' })
+        const role = await Role.findOne({ role: 'User' })
+        const user = new User({ name, email, password, level, role })
+        user.password = encryptPassword(password)
         await user.save()
         res.status(201)
         logger.info(successResponse('User created', user))
@@ -65,7 +71,7 @@ export const updateUser = async (req, res, next) => {
         }
         currentUser.name = name || currentUser.name
         currentUser.email = email || currentUser.email
-        currentUser.password = password || currentUser.password
+        currentUser.password = encryptPassword(password) || currentUser.password
         const user = await currentUser.save()
         res.status(200)
         logger.info(successResponse('User update', user))
