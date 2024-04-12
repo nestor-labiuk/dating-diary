@@ -9,7 +9,9 @@ POST http://localhost:8080/api/users
 Content-Type:  application/json
 
 {
-    
+    "name": "user10",
+    "email": "user10@user.com",
+    "password": "user10"
 }
 
 ### Update user - OK -
