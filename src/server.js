@@ -8,7 +8,7 @@ import { logger } from './loggers/index.loggers.js'
 export class Server {
     constructor() {
         this.app = express()
-        this.middleware()
+        this.middlewares()
         this.routes()
         this.connectionDb()
     }
@@ -17,7 +17,7 @@ export class Server {
         await dbConnection()
     }
 
-    middleware() {
+    middlewares() {
         this.app.use(express.json())
         this.app.use(cors())
         this.app.use(morgan('dev'))
