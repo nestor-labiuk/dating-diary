@@ -1,9 +1,12 @@
 import { Router } from 'express'
 import { adminCreateLevel, adminCreateRole, adminDeleteLevel, adminDeleteRole, adminGetAllLevels, adminGetAllRoles, adminUpdateLevel, adminUpdateRole, adminUpdateUser } from '../controllers/admin.controllers.js'
 import { isSuperAdmin, isValidateToken } from '../middlewares/validateToken.js'
+import { getAllUserByRole, getAllUsersByLevel } from '../controllers/users.controllers.js'
 
 const router = Router()
 
+router.get('/byRole', isValidateToken, getAllUserByRole)
+router.get('/byLevel', isValidateToken, getAllUsersByLevel)
 router.patch('/user/:id', isValidateToken, isSuperAdmin, adminUpdateUser)
 
 router.get('/role', isValidateToken, isSuperAdmin, adminGetAllRoles)
