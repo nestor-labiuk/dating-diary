@@ -1,10 +1,9 @@
 import jwt from 'jsonwebtoken'
 import User from '../models/User.js'
-// import { logger } from '../loggers/index.loggers.js'
 
 export const isValidateToken = (req, res, next) => {
     const accessToken = req.headers.access_token
-    if (!accessToken) return res.json({ message: 'Invalid signature' })
+    if (!accessToken) return res.json({ message: 'Token is required' })
     
     jwt.verify(accessToken, process.env.SIGNATURE, (err) => {
         if (err) return res.json({ message: 'Invalid signature' })
@@ -12,6 +11,7 @@ export const isValidateToken = (req, res, next) => {
     })
 }
 
+// TODO: cambiar permisos,  que cada usuario tenga un solo rol 
 export const isSuperAdmin = async(req, res, next) => {
     try {
         const { id } = req.params
@@ -20,10 +20,9 @@ export const isSuperAdmin = async(req, res, next) => {
         const role = userRole.map((role) => role.role )
         const rolePermission = role.find((role) => {return role === 'Super Admin'})
         if (!rolePermission) { 
-            return res.json({ message: 'You do not have permission' })
+            return res.json({ message: 'You do not have permission of  Super Admin' })
         }
         next()
-        
     } catch (error) {
         res.json({ message: 'ERROR' })
     }    
@@ -37,10 +36,9 @@ export const isAdmin = async(req, res, next) => {
         const role = userRole.map((role) => role.role )
         const rolePermission = role.find((role) => {return role === 'Admin'})
         if (!rolePermission) { 
-            return res.json({ message: 'You do not have permission' })
+            return res.json({ message: 'You do not have permission of Admin' })
         }
         next()
-        
     } catch (error) {
         res.json({ message: 'ERROR' })
     }    
@@ -57,7 +55,6 @@ export const isUser = async(req, res, next) => {
             return res.json({ message: 'You do not have permission' })
         }
         next()
-        
     } catch (error) {
         res.json({ message: 'ERROR' })
     }    

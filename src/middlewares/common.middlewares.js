@@ -5,7 +5,6 @@ export const validationField = (req, res, next) => {
     const result = validationResult(req)
     if (!result.isEmpty()) {
         return res.json({ message: 'Errores al validar los campos', errores: result.array() })
-    
     }
     next()
 }
