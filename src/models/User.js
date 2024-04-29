@@ -18,10 +18,10 @@ const UserSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: 'Level'
         },
-        role: [{
+        role: {
             type: Schema.Types.ObjectId,
             ref: 'Role'
-        }]
+        }
     })
 
 export default model('User', UserSchema)
