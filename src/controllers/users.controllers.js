@@ -7,7 +7,7 @@ import { successResponse, errorResponse } from '../utils/response.utils.js'
 
 export const getAllUsers = async (req, res, next ) => {
     try {
-        const users = await User.find()
+        const users = await User.find().populate('level').populate('role')
         if (users.length === 0) {
             res.status(204)
             logger.warn(errorResponse('List is empty', []))
@@ -23,17 +23,52 @@ export const getAllUsers = async (req, res, next ) => {
     }
 }
 
+// TODO: buscar usuarios por role
+export const getAllUserByRole = async (req, res, next) => {
+    const role = 'Admin'
+    try {
+        const users = await User.find().populate('level')
+        // const miRole = users.find({ role: role })
+        res.json(users)
+        
+    } catch (err) {
+        res.json(err)
+        next(err)
+    }
+}
+
+// TODO: buscar usuarios por level
+export const getAllUsersByLevel = async (req, res, next) => {
+    try {
+        const users = await User.find().populate('level')
+        res.json(users)
+
+    } catch (err) {
+        res.json(err)
+        next(err)
+    }
+}
+
 export const getUser = async (req, res, next) => {
     try {
         const { id } = req.params
-        const user = await User.findById(id)
+        const user = await User.findById(id).populate('level').populate('role')
         if (!user) {
             res.status(404)
             logger.warn(errorResponse('User not found', []))    
             return res.json(errorResponse('User not found', []))
         }
+
+        // const role = user.role
+        // console.log('***', role)
+        // const userRole = role.find( item => item.role === 'User')
+        // console.log(userRole.role)
+        const role = user.role
+        const userRole = role.map(item => item.role)
+        const roleAdmin = role.filter(item => item.role === 'Admin')
+
         logger.info(successResponse('User found', user))
-        res.json(successResponse('User found', user))
+        res.json(successResponse('User found', [user.level.level, userRole, roleAdmin] ))
     
     } catch (err) {
         res.json(err)

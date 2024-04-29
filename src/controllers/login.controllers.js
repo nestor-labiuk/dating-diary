@@ -16,7 +16,7 @@ export const loginUser = async (req, res, next) => {
             return res.json({ message: 'Data is incorrect' })
         }
         const payload = { id: user.id }
-        const accessToken = jwt.sign(payload, process.env.SIGNATURE, { expiresIn: '1h' })
+        const accessToken = jwt.sign(payload, process.env.SIGNATURE, { expiresIn: '24h' })
         const data = {
             _id: user.id,
             name: user.name,

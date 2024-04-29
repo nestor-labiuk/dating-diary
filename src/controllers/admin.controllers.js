@@ -9,6 +9,7 @@ export const adminUpdateUser = async (req, res, next) => {
     try {
         const { id } = req.params
         const { name, email, password, level, role } = req.body
+        // TODO: modificar búsqueda por ID a búsqueda por email ya que el ID es del Super Admin  
         const currentUser = await User.findById(id)
         const newLevel = await Level.findOne({ level: level })
         const newRole = await Role.findOne({ role: role })
