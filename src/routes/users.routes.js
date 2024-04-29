@@ -2,8 +2,8 @@ import { Router } from 'express'
 import { createUser, deleteUser, getAllUsers, getUser, updateUser } from '../controllers/users.controllers.js'
 import { isSuperAdmin, isUser, isValidateToken } from '../middlewares/validateToken.js'
 import { errorCatcher, isValidId, validationField } from '../middlewares/common.middlewares.js'
-import { validateEmail } from '../utils/validateEmail.utils.js'
 import { validationUserRegister } from '../middlewares/validateUserRegister.js'
+import { validateEmail } from '../middlewares/validateEmail.utils.js'
 
 const router = Router()
 
