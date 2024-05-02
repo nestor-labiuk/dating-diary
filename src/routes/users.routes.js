@@ -18,10 +18,11 @@ router.get('/:id',
 router.post('/',
     validationUserRegister,
     validationField,
-    validateEmail,
+    
     createUser,
     errorCatcher
 )
+// TODO: agregar validaciones de campos al updatear usuario
 router.patch('/:id',
     isValidateToken,
     isValidId,

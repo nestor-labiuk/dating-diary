@@ -20,68 +20,79 @@ router.get('/user/:id',
     adminGetUserByEmail,
     errorCatcher
 )
+// TODO: agregar validaciones de campos al updatear usuario
 router.patch('/user/:id',
     isValidateToken,
     isValidId,
     isSuperAdmin,
     adminUpdateUser
 )
-router.get('/byRole',
+router.get('/byRole/:id',
     isValidateToken,
+    isValidId,
     isSuperAdmin,
     adminUserByRole,
     errorCatcher
 )
-router.get('/byLevel',
+router.get('/byLevel/:id',
     isValidateToken,
+    isValidId,
     isSuperAdmin,
     adminUsersByLevel,
     errorCatcher
 )
-router.get('/role',
+router.get('/role/:id',
     isValidateToken,
+    isValidId,
     isSuperAdmin,
     adminGetAllRoles,
     errorCatcher
 )
-router.post('/role',
+router.post('/role/:id',
     isValidateToken,
+    isValidId,
     isSuperAdmin,
     adminCreateRole,
     errorCatcher
 )
 router.patch('/role/:id',
     isValidateToken,
+    isValidId,
     isSuperAdmin,
     adminUpdateRole,
     errorCatcher
 )
 router.delete('/role/:id',
     isValidateToken,
+    isValidId,
     isSuperAdmin,
     adminDeleteRole,
     errorCatcher
 )
-router.get('/level',
+router.get('/level/:id',
     isValidateToken,
+    isValidId,
     isSuperAdmin,
     adminGetAllLevels,
     errorCatcher
 )
-router.post('/level',
+router.post('/level:/',
     isValidateToken,
+    isValidId,
     isSuperAdmin,
     adminCreateLevel,
     errorCatcher
 )
 router.patch('/level/:id',
     isValidateToken,
+    isValidId,
     isSuperAdmin,
     adminUpdateLevel,
     errorCatcher
 )
 router.delete('/level/:id',
     isValidateToken,
+    isValidId,
     isSuperAdmin,
     adminDeleteLevel,
     errorCatcher

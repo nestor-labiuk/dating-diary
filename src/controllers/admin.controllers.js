@@ -2,33 +2,96 @@ import { logger } from '../loggers/index.loggers.js'
 import Level from '../models/Level.js'
 import Role from '../models/Role.js'
 import User from '../models/User.js'
-import { encryptPassword } from '../utils/encryptPassword.utils.js'
+import { encryptPassword } from '../utils/encryptPassword.js'
 import { errorResponse, successResponse } from '../utils/response.utils.js'
+
+export const adminGetAllUsers = async (req, res, next ) => {
+    try {
+        const users = await User.find().populate('level').populate('role')
+        if (users.length === 0) {
+            res.status(204)
+            logger.warn(errorResponse('List is empty', []))
+            return res.json(errorResponse('List is empty', []))
+        }
+        res.status(200)
+        logger.info(successResponse('Users found', users))
+        res.json(successResponse('Users found', users))
+    } catch (err) {
+        res.json(err)
+        next(err)
+    }
+}
+
+export const adminGetUserByEmail = async (req, res, next ) => {
+    try {
+        const { email } = req.body
+        const user = await User.findOne({ email }).populate('level').populate('role')
+        if (!user) {
+            res.status(404)
+            logger.warn(errorResponse('Not found', []))
+            return res.json(errorResponse('Not found', []))
+        }
+        res.status(200)
+        logger.info(successResponse('User found', user))
+        res.json(successResponse('User found', user))
+    } catch (err) {
+        res.json(err)
+        next(err)
+    }
+}
 
 export const adminUpdateUser = async (req, res, next) => {
     try {
-        const { id } = req.params
-        const { name, email, password, level, role } = req.body
-        // TODO: modificar búsqueda por ID a búsqueda por email ya que el ID es del Super Admin  
+        const { id, name, email, password, level, role } = req.body
         const currentUser = await User.findById(id)
-        const newLevel = await Level.findOne({ level: level })
-        const newRole = await Role.findOne({ role: role })
+        const newLevel = await Level.findOne({ level })
+        if (!newLevel) {
+            return res.json({ message: 'inexistente' })
+        }
+        const newRole = await Role.findOne({ role })
+        if (!newRole) {
+            return res.json({ message: 'inexistente' })
+        }
         if (!currentUser) {
             res.status(404)
             logger.warn(errorResponse('User not found', currentUser)) 
-            return res.json(errorResponse('User not found', currentUser))
+            return res.json(errorResponse('User not not found', currentUser))
         }
-        currentUser.role.push(newRole) 
-        currentUser.level = newLevel || currentUser.level
-        if (password) {currentUser.password = encryptPassword(password)}
-
-        currentUser.name = name || currentUser.name
-        currentUser.email = email || currentUser.email
+        currentUser.level = level ? newLevel.id : currentUser.level
+        currentUser.role = role ? newRole.id : currentUser.role
+        currentUser.password = password ? encryptPassword(password) : currentUser.password
+        currentUser.name = name ? name : currentUser.name
+        currentUser.email = email ? email : currentUser.email
         const user = await currentUser.save()
         res.status(200)
         logger.info(successResponse('User update', user))
         res.json(successResponse('User updated', user))
+    } catch (err) {
+        res.json(err)
+        next(err)
+    }
+}
 
+// TODO: buscar usuarios por role
+export const adminUserByRole = async(req, res, next) => {
+    try {
+        const { role } = req.body
+        const userRole = await Role.findOne({ role })
+        const users = await User.find({ role: userRole.id }).populate('role')
+        res.json(users)
+    } catch (err) {
+        res.json(err)
+        next(err)
+    }
+}
+
+// TODO: buscar usuarios por level
+export const adminUsersByLevel = async (req, res, next) => {
+    try {
+        const { level } = req.body
+        const userLevel = await Level.findOne( { level })
+        const users = await User.find({ level: userLevel.id }).populate('level')
+        res.json(users)
     } catch (err) {
         res.json(err)
         next(err)
